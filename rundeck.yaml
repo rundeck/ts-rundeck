@@ -1,0 +1,391 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Rundeck
+  license:
+    name: MIT
+host: localhost
+basePath: '/api/23'
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /user/list:
+    get:
+      summary: List user profiles
+      operationId: listUsers
+      tags:
+      - user
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {type: array, items: { $ref: '#/definitions/User'} }
+
+  /user/info:
+    get:
+      summary: Get same user profile data
+      operationId: getUserProfile
+      tags:
+      - user
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+    post:
+      summary: Modify same user profile data
+      operationId: modifyUserProfile
+      tags:
+      - user
+      parameters:
+      - in: body
+        name: User
+        description: New user profile data
+        required: true
+        schema: {$ref: '#/definitions/ModifyUserRequest'}
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+
+  /user/info/{userID}:
+    get:
+      summary: Get another user's profile data
+      operationId: getUserProfileByID
+      tags:
+      - user
+      parameters:
+      - name: userID
+        in: path
+        required: true
+        description: The ID of the user to retrieve profile information for
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+    post:
+      summary: Modify another user's profile data
+      operationId: modifyUserProfileByID
+      tags:
+      - user
+      parameters:
+      - name: userID
+        in: path
+        required: true
+        description: The ID of the user to retrieve profile information for
+        type: string
+      - in: body
+        name: User
+        description: New user profile data
+        required: true
+        schema: {$ref: '#/definitions/ModifyUserRequest'}
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+
+  /system/logstorage:
+    get:
+      summary: Get Log Storage information and stats
+      operationId: getLogStorageInfo
+      tags:
+      - system
+      - log
+      responses:
+        '200':
+          description: Expected reponse to a valid request
+          schema: {$ref: '#/definitions/LogStorage'}
+  
+  /system/logstorage/incomplete:
+    get:
+      summary: List all executions with incomplete log storage
+      operationId: getIncompleteLogStorageExecutions
+      tags:
+      - system
+      - execution
+      - log
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/IncompleteLogExecutions'}
+  
+  /system/logstorage/incomplete/resume:
+    post:
+      summary: Resume processing incomplete Log Storage uploads
+      operationId: resumeIncompleteLogStorageExecutions
+      tags:
+      - system
+      - execution
+      - log
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema:
+            properties:
+              resumed: {type: boolean}
+
+  /system/executions/enable:
+    post:
+      summary: Enables executions, allowing adhoc and manual and scheduled jobs to be run
+      operationId: enableExecutions
+      tags:
+      - system
+      - execution
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema:
+            properties:
+              executionMode: {type: string}
+
+  /system/executions/disable:
+    post:
+      summary: Disables executions, preventing adhoc and manual and scheduled jobs from running.
+      operationId: disableExecutions
+      tags:
+      - system
+      - execution
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema:
+            properties:
+              executionMode: {type: string}
+  
+  /scheduler/takeover:
+    put:
+      summary: Tell a Rundeck server in cluster mode to claim all scheduled jobs from another cluster server
+      operationId:  takeoverJobs
+      tags:
+      - scheduler
+      - cluster
+      - job
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/TakeoverScheduleResponse'}
+
+  /scheduler/server/{uuid}/jobs:
+    get:
+      summary: List the scheduled Jobs with their schedule owned by the cluster server with the specified UUID
+      operationId: listScheduledJobsForServer
+      tags:
+      - scheduler
+      - cluster
+      - job
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: The ID of the user to retrieve profile information for
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {type: array, items: {$ref: '#/definitions/Job'}}
+
+  /scheduler/jobs:
+    get:
+      summary: List the scheduled Jobs with their schedule owned by the cluster server
+      operationId: listScheduledJobs
+      tags:
+      - scheduler
+      - cluster
+      - job
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {type: array, items: {$ref: '#/definitions/Job'}}
+
+definitions:
+  User:
+    properties:
+      login:      {type: string}
+      firstName:  {type: string}
+      lastName:   {type: string}
+      email:      {type: string}
+  ModifyUserRequest:
+    properties:
+      firstName:  {type: string}
+      lastName:   {type: string}
+      email:      {type: string}
+  SystemInfo:
+    properties:
+      system:
+        properties:
+          timestamp:
+            properties:
+              epoch:    {type: number}
+              unit:     {type: string}
+              datetime: {type: string}
+          rundeck:
+            properties:
+              version:     {type: string}
+              build:       {type: string}
+              node:        {type: string}
+              base:        {type: string}
+              apiversion:  {type: number}
+              serverUUID:  {type: string}
+          executions:
+            properties:
+              active:        {type: boolean}
+              executionMode: {type: string}
+          os:
+            properties:
+              arch:    {type: string}
+              name:    {type: string}
+              version: {type: string}
+          jvm:
+            properties:
+              name:                  {type: string}
+              vendor:                {type: string}
+              version:               {type: string}
+              implementationVersion: {type: string}
+          stats:
+            properties:
+              uptime:
+                properties:
+                  duration: {type: number}
+                  unit:     {type: string}
+                  since:
+                    properties:
+                      epoch:    {type: number}
+                      unit:     {type: string}
+                      datetime: {type: string}
+              cpu:
+                properties:
+                  loadAverage:
+                    properties:
+                      unit:    {type: string}
+                      average: {type: number}
+                  processors: {type: number}
+              memory:
+                properties:
+                  unit:  {type: string}
+                  max:   {type: number}
+                  free:  {type: number}
+                  total: {type: number}
+              scheduler:
+                properties:
+                  running:        {type: number}
+                  threadPoolSize: {type: number}
+              threads:
+                properties:
+                  active: {type: number}
+          metrics:
+            properties:
+              href:        {type: string}
+              contentType: {type: string}
+          threadDump:
+            properties:
+              href:        {type: string}
+              contentType: {type: string}
+  LogStorage:
+    properties:
+      enabled:
+        type: boolean
+        description: True if plugin is configured
+      pluginName:
+        type: string
+        description: Name of the configured plugin
+      succeededCount:
+        type: number
+        description: Number of successful storage requests
+      failedCount:
+        type: number
+        description: Number of failed storage requests
+      queuedCount:
+        type: number
+        description: Number of queued storage requests
+      totalCount:
+        type: number
+        description: Total number of storage requests (currently queued plus previously processed)
+      incompleteCount:
+        type: number
+        description: Number of storage requests which have not completed successfully
+      missingCount:
+        type: number
+        description: Number of executions for this cluster node which have no associated storage requests
+  Execution:
+    properties:
+      id: {type: string}
+      project: {type: string}
+      href: {type: string}
+      permalink: {type: string}
+      storage:
+        properties:
+          localFilesPresent: {type: boolean}
+          incompleteFiletypes:
+            type: array
+            items:
+              type: string
+              description: Comma-separated list of filetypes which have not be uploaded, e.g. rdlog,state.json. Types are rdlog (log output), state.json (workflow state data), execution.xml (execution definition)
+              enum: [rdlog, state.json, execution.xml]
+          queued: {type: boolean}
+          failed: {type: boolean}
+          date: {type: string}
+      errors: {type: array, items: {type: string}}
+  IncompleteLogExecutions:
+    properties:
+      total:  {type: number}
+      max:    {type: number}
+      offset: {type: number}
+      executions:
+        type: array
+        items: {$ref: '#/definitions/Execution'}
+  TakeoverScheduleRequest:
+    properties:
+      server:
+        properties:
+          uuid:    {type: string}
+          all:     {type: boolean}
+      project: {type: string}
+      job:
+        properties:
+          id: {type: string}
+
+  JobReference:
+    properties:
+      href:             {type: string}
+      permalink:        {type: string}
+      id:               {type: string}
+      pervious-owner:   {type: string}
+
+  TakeoverScheduleResponse:
+    properties:
+      takeoverSchedule:
+        properties:
+          project: {type: string}
+          jobs:
+            properties:
+              failed:       {type: array, items: {$ref: '#/definitions/JobReference'}}
+              successfull:  {type: array, items: {$ref: '#/definitions/JobReference'}}
+              total:        {type: number}
+          server:
+            properties:
+              uuid: {type: string}
+              all:  {type: boolean}
+      self:
+        properties:
+          server:
+            properties:
+              uuid: {type: string}
+      message:    {type: string}
+      apiversion: {type: number}
+      success:    {type: boolean}
+
+  Job:
+    properties:
+      id:               {type: string}
+      name:             {type: string}
+      group:            {type: string}
+      project:          {type: string}
+      description:      {type: string}
+      href:             {type: string}
+      permalink:        {type: string}
+      scheduled:        {type: boolean}
+      scheduleEnabled:  {type: boolean}
+      enabled:          {type: boolean}

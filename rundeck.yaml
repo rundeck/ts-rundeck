@@ -200,6 +200,307 @@ paths:
           description: Expected response to a valid request
           schema: {type: array, items: {$ref: '#/definitions/Job'}}
 
+  /system/acl:
+    get:
+      summary: List ACL Policies
+      operationId: listAclPolicies
+      tags:
+      - system
+      - acl
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/AclList'}
+
+  /system/acl/{policyName}:
+    get:
+      summary: Retrieve the YAML texas of the ACL Policy file
+      operationId: getPolicyFile
+      tags:
+      - system
+      - acl
+      parameters:
+      - name: policyName
+        in: path
+        required: true
+        description: Policy file name
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/AclPolicyResponse'}
+    post:  
+      summary: Create a policy
+      operationId: createPolicy
+      tags:
+      - system
+      - acl
+      parameters:
+      - name: policyName
+        in: path
+        required: True
+        description: Policy file name
+        type: string
+      responses:
+        '201':
+          description: Created
+          schema: {$ref: '#/definitions/AclPolicyResponse'}
+        '409':
+          description: Conflict
+        '400':
+          description: Bad Request
+          schema: {$ref: '#/definitions/InvalidAclPolicyResponse'}
+    put:
+      summary: Update policy
+      operationId: updatePolicy
+      tags:
+      - system
+      - acl
+      parameters:
+      - name: policyName
+        in: path
+        required: True
+        description: Policy file name
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/AclPolicyResponse'}
+        '404':
+          description: Policy not found
+    delete:
+      summary: Delete policy
+      operationId: deletePolicy
+      tags:
+      - system
+      - acl
+      parameters:
+      - name: policyName
+        in: path
+        required: True
+        description: Policy file name
+        type: string
+      responses:
+        '204':
+          description: Policy deleted
+        '404':
+          description: Policy not found
+
+  /project/{project}/jobs:
+    get:
+      summary: List the jobs that exist for a project
+      operationId: listProjectJobs
+      tags:
+      - project
+      - job
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Project name
+        type: string
+      - name: idList
+        in: query
+        required: false
+        description: Comma separated list of Job IDs to include
+        type: string
+      - name: groupPath
+        in: query
+        required: false
+        description: Group or partial group path to include all jobs within that group path. Set to the special value "-" to match the top level jobs only.
+        default: '*'
+        type: string
+      - name: jobFilter
+        in: query
+        required: false
+        description: A filter for the job name. Matches any job name that contains this value.
+        type: string
+      - name: jobExactFilter
+        in: query
+        required: false
+        description: An exact job name to match.
+        type: string
+      - name: groupPathExact
+        in: query
+        required: false
+        description: An exact group path to match. Set to the special value "-" to match the top level jobs only.
+        type: string
+      - name: scheduledFilter
+        in: query
+        required: false
+        description: Specify whether to return only scheduled or only not scheduled jobs.
+        type: boolean
+      - name: serverNodeUUIDFilter
+        in: query
+        required: false
+        description: In cluster mode, use to select scheduled jobs assigned to the server with the given UUID.
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {type: array, items: {$ref: '#/definitions/Job'}}
+
+  /job/{id}/executions:
+    post:
+      summary: Run the specified job
+      operationId: runJob
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: ID of job to run
+        type: number
+      - name: Options
+        in: body
+        required: false
+        type: {$ref: '#/definitions/ExecuteJobRequest'}
+      responses:
+        '200':
+          description: Expected response for a valid request
+          schema: {$ref: '#/definitions/ExecutionList'}
+  
+  /job/{jobID}/retry/{executionID}:
+    post:
+      summary: Retry a failed job execution on failed nodes only or on the same as the execution. This is the same functionality as the `Retry Failed Nodes ...` button on the execution page.
+      operationId: retryJobExecution
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: jobID
+        in: path
+        required: true
+        type: number
+      - name: executionID
+        in: path
+        required: true
+        type: number
+      - name: Request
+        in: body
+        required: false
+        type: {$ref: '#/definitions/RetryExecutionRequest'}
+      responses:
+        '200':
+          description: Exected response to a valid request.
+          schema: {$ref: '#/definitions/ExecutionList'}
+
+  /project/{project}/jobs/export:
+    get:
+      summary: Export the job definitions in XML or YAML formats.
+      operationId: exportJobs
+      tags:
+      - job
+      - project
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: The project to export jobs for.
+        type: string
+      - name: format
+        in: path
+        required: false
+        description: XML or YAML format for exported jobs.
+        type: {enum: [xml yaml]}
+        default: xml
+      - name: idlist
+        in: path
+        required: false
+        description: A comma-separated list of Job IDs to export.
+        type: string
+      - name: groupPath
+        in: path
+        required: false
+        description: Group or partial group path to include all jobs within that group path.
+        type: string
+      - name: jobFilter
+        in: path
+        required: false
+        description: Filter for the job Name.
+      responses:
+        '200':
+          description: Expected response to a valid request.
+          schema: {type: string}
+
+  /project/{project}/jobs/import:
+    post:
+      summary: Import job definitions in XML or YAML formats.
+      operationId: importJobs
+      tags:
+      - job
+      - project
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+  
+  /job/{id}:
+    get:
+      summary: Export a single job definition in XML or YAML formats.
+      operationId: getJob
+      tags:
+      - job
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: ID of the job to export.
+        type: number
+      - name: format
+        in: path
+        required: false
+        type: {enum: [xml yaml]}
+        default: xml 
+      responses:
+        '200':
+          description: Expected response to a valid request.
+          schema: {
+            properties:
+              content: {type: string}
+          }
+    delete:
+      summary: Delete a single job definition.
+      operationId: deleteJob
+      tags:
+      - job
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: ID of job to delete.
+        type: number
+      reponses:
+        '204':
+          description: Job was deleted.
+        '404':
+          descriptoin: Job not found.
+
+  /jobs/delete:
+    delete:
+      summary: Delete multiple job definitions at once.
+      operationId: deleteJobsBulk
+      tags:
+      - job
+      parameters:
+      - name: Request
+        in: body
+        required: True
+        type:
+          properties:
+            ids:  {type: array, items: string}
+            idList:
+              description: Comma separated list of job IDs.
+              type: string
+      responses:
+
+  
+
+
 definitions:
   User:
     properties:
@@ -388,4 +689,125 @@ definitions:
       permalink:        {type: string}
       scheduled:        {type: boolean}
       scheduleEnabled:  {type: boolean}
+      serverNodeUUID:   {type: string}
+      serverOwner:      {type: string}
       enabled:          {type: boolean}
+
+  JobMetadata:
+    properties:
+      id:               {type: string}
+      name:             {type: string}
+      group:            {type: string}
+      project:          {type: string}
+      description:      {type: string}
+      href:             {type: string}
+      permalink:        {type: string}
+      scheduled:        {type: boolean}
+      scheduleEnabled:  {type: boolean}
+      averageDuration:  {type: number}
+      options:          {type: object}
+
+  DeleteJobResponse:
+    properties:
+      requestCount:
+        description: The number of job IDs that were in the delete request.
+        type: number
+      allsuccessful: {type: boolean}
+      
+
+  ExecutionList:
+    properties:
+      paging: {
+        properties:
+          count:  {type: number}
+          total:  {type: number}
+          offset: {type: number}
+          max:    {type: number}
+      }
+      executions: {type: array, items: {$ref: '#/definitions/Execution'}}
+
+  Execution:
+    properties:
+      id:           {type: number}
+      href:         {type: string}
+      permalink:    {type: string} 
+      status:       {type: {enum: [running succeeded failed aborted timedout failed-with-retry scheduled other]}} 
+      customStatus: {type: string}  
+      project:      {type: string} 
+      user:         {type: string}  
+      serverUUID:   {type: string}   
+      date-started: {
+        properties:
+          unixtime: {type: number}
+          date:     {type: string}
+      }
+      job:             {type: {$ref: '#/definitions/JobMetadata'}}
+      description:     {type: string}
+      argstring:       {type: string}
+      successfulNodes: {type: array, items: string}
+
+  AclReference:
+    properties:
+      path:  {type: string}
+      type:  {type: string}
+      name:  {type: string}
+      href:  {type: string}
+
+  AclList:
+    properties:
+      path:       {type: string}
+      type:       {type: string}
+      href:       {type: string}
+      resources:  {type: array, items: {$ref: '#/definitions/AclReference'}}
+
+  AclPolicyResponse:
+    properties:
+      content:
+        type: string
+        description: Policy as JSON encoded YAML string
+
+  InvalidAclPolicyResponse:
+    properties:
+      valid: {type: boolean}
+      policies:
+        type: array
+        items:
+          properties:
+            policy: {type: string}
+            errors: {type: array, items: string}
+
+  RetryExecutionRequest:
+    properties:
+      argString:
+        description: Argument string to pass to the job, of the form `-opt value -opt2 value ...`
+        type: string
+      loglevel:
+        description: Loglevel to use
+        type: {enum: [DEBUG VERBOSE INFO WARN ERROR]}
+      asUser:
+        description: A username identifying the user who ran the job. Requires `runAs` permission.
+        type: string
+      options:
+        description: Option value for option named `OPTNAME`. If specified the `argString` value is ignored (*API v18* or later).
+        type: object
+
+  ExecuteJobRequest:
+    properties:
+      argString:
+        description: Argument string to pass to the job, of the form `-opt value -opt2 value ...`
+        type: string
+      loglevel:
+        description: Loglevel to use
+        type: {enum: [DEBUG VERBOSE INFO WARN ERROR]}
+      asUser:
+        description: A username identifying the user who ran the job. Requires `runAs` permission.
+        type: string
+      filter:
+        description: A node filter string.
+        type: string
+      runAtTime:
+        description: Specify a time to run the job (*API v18* or later). `ISO-8601` format with optional milliseconds.
+        type: string
+      options:
+        description: Option value for option named `OPTNAME`. If specified the `argString` value is ignored (*API v18* or later).
+        type: object

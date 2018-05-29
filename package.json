@@ -9,9 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "autorest": "2.0.4276",
     "axios": "^0.18.0",
-    "ms-rest-js": "^0.4.0",
+    "ms-rest-js": "^0.7.216",
     "ts-node": "^6.0.3",
     "typescript": "^2.8.3"
   }

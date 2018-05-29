@@ -4,7 +4,6 @@ info:
   title: Rundeck
   license:
     name: MIT
-host: localhost
 basePath: '/api/23'
 schemes:
 - http
@@ -15,6 +14,8 @@ produces:
 paths:
   /user/list:
     get:
+      produces:
+        - 'application/json'
       summary: List user profiles
       operationId: listUsers
       tags:
@@ -352,11 +353,11 @@ paths:
         in: path
         required: True
         description: ID of job to run
-        type: number
-      - name: Options
+        type: integer
+      - name: request
         in: body
         required: false
-        type: {$ref: '#/definitions/ExecuteJobRequest'}
+        schema: {$ref: '#/definitions/ExecuteJobRequest'}
       responses:
         '200':
           description: Expected response for a valid request
@@ -377,11 +378,11 @@ paths:
       - name: executionID
         in: path
         required: true
-        type: number
+        type: integer
       - name: Request
         in: body
         required: false
-        type: {$ref: '#/definitions/RetryExecutionRequest'}
+        schema: {$ref: '#/definitions/RetryExecutionRequest'}
       responses:
         '200':
           description: Exected response to a valid request.
@@ -401,25 +402,27 @@ paths:
         description: The project to export jobs for.
         type: string
       - name: format
-        in: path
+        in: query
         required: false
         description: XML or YAML format for exported jobs.
-        type: {enum: [xml yaml]}
+        type: string
+        enum: ['xml', 'yaml']
         default: xml
       - name: idlist
-        in: path
+        in: query
         required: false
         description: A comma-separated list of Job IDs to export.
         type: string
       - name: groupPath
-        in: path
+        in: query
         required: false
         description: Group or partial group path to include all jobs within that group path.
         type: string
       - name: jobFilter
-        in: path
+        in: query
         required: false
         description: Filter for the job Name.
+        type: string
       responses:
         '200':
           description: Expected response to a valid request.
@@ -438,6 +441,9 @@ paths:
         required: True
         description: Name of the project to import jobs into.
         type: string
+      responses:
+        '200':
+          description: Expected response to a valid request.
   
   /job/{id}:
     get:
@@ -450,19 +456,19 @@ paths:
         in: path
         required: True
         description: ID of the job to export.
-        type: number
+        type: integer
       - name: format
-        in: path
+        in: query
         required: false
-        type: {enum: [xml yaml]}
-        default: xml 
+        type: string
+        enum: ['xml', 'yaml']
+        default: xml
       responses:
         '200':
           description: Expected response to a valid request.
-          schema: {
+          schema:
             properties:
               content: {type: string}
-          }
     delete:
       summary: Delete a single job definition.
       operationId: deleteJob
@@ -474,31 +480,28 @@ paths:
         required: True
         description: ID of job to delete.
         type: number
-      reponses:
+      responses:
         '204':
           description: Job was deleted.
         '404':
-          descriptoin: Job not found.
+          description: Job not found.
 
-  /jobs/delete:
-    delete:
-      summary: Delete multiple job definitions at once.
-      operationId: deleteJobsBulk
-      tags:
-      - job
-      parameters:
-      - name: Request
-        in: body
-        required: True
-        type:
-          properties:
-            ids:  {type: array, items: string}
-            idList:
-              description: Comma separated list of job IDs.
-              type: string
-      responses:
-
-  
+  # /jobs/delete:
+  #   delete:
+  #     summary: Delete multiple job definitions at once.
+  #     operationId: deleteJobsBulk
+  #     tags:
+  #     - job
+  #     parameters:
+  #     - name: Request
+  #       in: body
+  #       required: True
+  #       type:
+  #         properties:
+  #           ids:  {type: array, items: string}
+  #           idList:
+  #             description: Comma separated list of job IDs.
+  #             type: string
 
 
 definitions:
@@ -610,7 +613,7 @@ definitions:
       missingCount:
         type: number
         description: Number of executions for this cluster node which have no associated storage requests
-  Execution:
+  IncompleteLogExecution:
     properties:
       id: {type: string}
       project: {type: string}
@@ -619,16 +622,17 @@ definitions:
       storage:
         properties:
           localFilesPresent: {type: boolean}
-          incompleteFiletypes:
-            type: array
-            items:
-              type: string
-              description: Comma-separated list of filetypes which have not be uploaded, e.g. rdlog,state.json. Types are rdlog (log output), state.json (workflow state data), execution.xml (execution definition)
-              enum: [rdlog, state.json, execution.xml]
+          incompleteFiletypes: {type: array, items: {type: string}}
           queued: {type: boolean}
           failed: {type: boolean}
           date: {type: string}
       errors: {type: array, items: {type: string}}
+
+  IncompleteFileType:
+    type: string
+    enum: ['rdlog', 'state.json', 'execution.xml']
+    description: Comma-separated list of filetypes which have not be uploaded, e.g. rdlog,state.json. Types are rdlog (log output), state.json (workflow state data), execution.xml (execution definition)
+
   IncompleteLogExecutions:
     properties:
       total:  {type: number}
@@ -636,7 +640,8 @@ definitions:
       offset: {type: number}
       executions:
         type: array
-        items: {$ref: '#/definitions/Execution'}
+        items: {$ref: '#/definitions/IncompleteLogExecution'}
+
   TakeoverScheduleRequest:
     properties:
       server:
@@ -717,13 +722,12 @@ definitions:
 
   ExecutionList:
     properties:
-      paging: {
+      paging:
         properties:
           count:  {type: number}
           total:  {type: number}
           offset: {type: number}
           max:    {type: number}
-      }
       executions: {type: array, items: {$ref: '#/definitions/Execution'}}
 
   Execution:
@@ -731,20 +735,19 @@ definitions:
       id:           {type: number}
       href:         {type: string}
       permalink:    {type: string} 
-      status:       {type: {enum: [running succeeded failed aborted timedout failed-with-retry scheduled other]}} 
+      status:       {type: string, enum: ['running', 'succeeded', 'failed', 'aborted', 'timedout', 'failed-with-retry', 'scheduled', 'other']}
       customStatus: {type: string}  
       project:      {type: string} 
       user:         {type: string}  
       serverUUID:   {type: string}   
-      date-started: {
+      date-started:
         properties:
           unixtime: {type: number}
           date:     {type: string}
-      }
-      job:             {type: {$ref: '#/definitions/JobMetadata'}}
+      job:             {$ref: '#/definitions/JobMetadata'}
       description:     {type: string}
       argstring:       {type: string}
-      successfulNodes: {type: array, items: string}
+      successfulNodes: {type: array, items: {type: string}}
 
   AclReference:
     properties:
@@ -772,9 +775,10 @@ definitions:
       policies:
         type: array
         items:
+          type: object
           properties:
             policy: {type: string}
-            errors: {type: array, items: string}
+            errors: {type: array, items: {type: string}}
 
   RetryExecutionRequest:
     properties:
@@ -783,7 +787,8 @@ definitions:
         type: string
       loglevel:
         description: Loglevel to use
-        type: {enum: [DEBUG VERBOSE INFO WARN ERROR]}
+        type: string
+        enum: ['DEBUG', 'VERBOSE', 'INFO', 'WARN', 'ERROR']
       asUser:
         description: A username identifying the user who ran the job. Requires `runAs` permission.
         type: string
@@ -798,7 +803,8 @@ definitions:
         type: string
       loglevel:
         description: Loglevel to use
-        type: {enum: [DEBUG VERBOSE INFO WARN ERROR]}
+        type: string
+        enum: ['DEBUG', 'VERBOSE', 'INFO', 'WARN', 'ERROR']
       asUser:
         description: A username identifying the user who ran the job. Requires `runAs` permission.
         type: string

@@ -486,6 +486,51 @@ paths:
         '404':
           description: Job not found.
 
+  /project/{project}/import:
+    put:
+      summary: Import project archive to job.
+      operationId: importProjectArchive
+      tags:
+      - job
+      - project
+      consumes:
+         - application/zip
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      - name: jobUuidOption
+        in: query
+        type: string
+        enum: [preserve, remove]
+        default: remove
+      - name: importExecutions
+        in: query
+        type: boolean
+      - name: importConfig
+        in: query
+        type: boolean
+      - name: importACL
+        in: query
+        type: boolean
+      - name: File
+        in: body
+        required: true
+        x-ms-parameter-location: method 
+        schema:
+          type: object
+          format: file
+
+      responses:
+        '200':
+          description: Expected response to a valid request.
+
+
+
+        
+
   # /jobs/delete:
   #   delete:
   #     summary: Delete multiple job definitions at once.

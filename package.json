@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "ms-rest-js": "^0.7.216",
     "ts-node": "^6.0.3",
     "typescript": "^2.8.3"
+  },
+  "devDependencies": {
+    "ms-rest-js": "^0.21.406"
   }
 }

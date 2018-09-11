@@ -488,7 +488,7 @@ paths:
 
   /project/{project}/import:
     put:
-      summary: Import project archive to job.
+      summary: Import project archive.
       operationId: importProjectArchive
       tags:
       - job
@@ -522,14 +522,107 @@ paths:
         schema:
           type: object
           format: file
-
       responses:
         '200':
           description: Expected response to a valid request.
 
+  /project/{project}/readme.md:
+    get:
+      summary: Get the readme.md contents
+      operationId: projectGetReadme
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '200':
+          description: readme.md contents
+          schema:
+            properties:
+              contents: {type: string}
+        '404':
+          description: The file does not exist
+    put:
+      summary: Create or modify project README.md
+      operationId: projectPutReadme
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      - name: Request
+        in: body
+        required: True
+        schema:
+          properties:
+            contents: {type: string}
+      responses:
+        '200':
+          description: Expected response to a valid request.
+    delete:
+      summary: Delete project README.md
+      operationId: projectDeleteReadme
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '204':
+          description: No Content
 
-
-        
+  /project/{project}/motd.md:
+    get:
+      summary: Get the readme.md contents
+      operationId: projectGetMotd
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '200':
+          description: motd.md contents
+          schema:
+            properties:
+              contents: {type: string}
+        '404':
+          description: The file does not exist
+    put:
+      summary: Create or modify project MOTD.md
+      operationId: projectPutMotd
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      - name: Request
+        in: body
+        required: True
+        schema:
+          properties:
+            contents: {type: string}
+      responses:
+        '200':
+          description: Expected response to a valid request.
+    delete:
+      summary: Delete project motd.md
+      operationId: projectDeleteMotd
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '204':
+          description: No Content
 
   # /jobs/delete:
   #   delete:

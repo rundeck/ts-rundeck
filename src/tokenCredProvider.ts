@@ -1,11 +1,15 @@
 import { ServiceClientCredentials, WebResource } from 'ms-rest-js'
 
-export class TokenCredentialProvider implements ServiceClientCredentials {
-    constructor(readonly token: string) {}
+import {BaseCredentialProvider} from './baseCredProvider'
 
-    signRequest(webResource: WebResource) {
+export class TokenCredentialProvider extends BaseCredentialProvider {
+    constructor(readonly token: string) {
+        super()
+    }
+
+    async signRequest(webResource: WebResource) {
+        await super.signRequest(webResource)
         webResource.headers.set('X-Rundeck-Auth-Token', this.token)
-        // webResource.headers.set('accept', 'application/json')
-        return Promise.resolve(webResource)
+        return webResource
     }
 }

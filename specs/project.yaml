@@ -13,6 +13,151 @@ consumes:
 - application/json
 
 paths:
+  /projects:
+    get:
+      summary: List projects
+      operationId: projectList
+      tags:
+      - project
+      responses:
+        '200':
+          description: List of projects
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:        {type: string}
+                description: {type: string}
+                url:         {type: string}
+    post:
+      summary: Create a new project
+      operationId: projectCreate
+      tags:
+      - project
+      parameters:
+      - name: ProjectCreateRequest
+        in: body
+        required: true
+        schema:
+          properties:
+            name:   {type: string}
+            config: {type: object}
+      responses:
+        '200': {description: Project created}
+
+  /project/{project}:
+    get:
+      summary: Get information about a project
+      operationId: projectGet
+      parameters:
+      - name: project
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Project info
+          schema: {$ref: '#/definitions/Project'}
+    delete:
+      summary: Delete project
+      operationId: projectDelete
+      parameters:
+      - name: project
+        in: path
+        required: true
+        type: string
+      responses:
+        '204': {description: Content deleted}
+
+  /project/{project}/config:
+    get:
+      summary: Get project config
+      operationId: projectConfigGet
+      parameters:
+      - name: project
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Project info
+          schema: {type: object}
+    put:
+      summary: Update project config
+      operationId: projectConfigUpdate
+      parameters:
+      - name: project
+        in: path
+        required: true
+        type: string
+      - name: ProjectConfigUpdateRequest
+        in: body
+        required: true
+        schema: {type: object}
+      responses:
+        '200': {description: Project config updated}
+
+  /project/{project}/config/{key}:
+    get:
+      summary: Get project config key
+      operationId: projectConfigKeyGet
+      parameters:
+      - name: project
+        in: path
+        required: true
+        type: string
+      - name: key
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Project config key and value
+          schema:
+            properties:
+              key:   {type: string}
+              value: {type: string}
+    put:
+      summary: Get project config key
+      operationId: projectConfigKeySet
+      parameters:
+      - name: project
+        in: path
+        required: true
+        type: string
+      - name: key
+        in: path
+        required: true
+        type: string
+      - name: ProjectConfigKeySetRequest
+        required: true
+        in: body
+        schema:
+          properties:
+            value: {type: string}
+      responses:
+        '200':
+          description: Project config key set
+          schema:
+            properties:
+              key:   {type: string}
+              value: {type: string}
+    delete:
+      summary: Delete project config key
+      operationId: projectConfigKeyDelete
+      parameters:
+      - name: project
+        in: path
+        required: true
+        type: string
+      - name: key
+        in: path
+        required: true
+        type: string
+      responses:
+        '204': {description: Content deleted}
+
   /project/{project}/jobs/export:
     get:
       summary: Export the job definitions in XML or YAML formats.
@@ -67,8 +212,7 @@ paths:
         description: Name of the project to import jobs into.
         type: string
       responses:
-        '200':
-          description: Expected response to a valid request.
+        '200': {description: Expected response to a valid request.}
 
   /project/{project}/import:
     put:
@@ -107,8 +251,7 @@ paths:
           type: object
           format: file
       responses:
-        '200':
-          description: Expected response to a valid request.
+        '200': {description: Expected response to a valid request}
 
   /project/{project}/export:
     get:
@@ -174,8 +317,7 @@ paths:
           schema:
             properties:
               contents: {type: string}
-        '404':
-          description: The file does not exist
+        '404': {description: The file does not exist}
     put:
       summary: Create or modify project README.md
       operationId: projectReadmePut
@@ -185,15 +327,14 @@ paths:
         required: True
         description: Name of the project to import jobs into.
         type: string
-      - name: Request
+      - name: ReadmeUpdateRequest
         in: body
         required: True
         schema:
           properties:
             contents: {type: string}
       responses:
-        '200':
-          description: Expected response to a valid request.
+        '200': {description: Expected response to a valid request}
     delete:
       summary: Delete project README.md
       operationId: projectReadmeDelete
@@ -204,8 +345,7 @@ paths:
         description: Name of the project to import jobs into.
         type: string
       responses:
-        '204':
-          description: No Content
+        '204': {description: No Content}
 
   /project/{project}/motd.md:
     get:
@@ -223,8 +363,7 @@ paths:
           schema:
             properties:
               contents: {type: string}
-        '404':
-          description: The file does not exist
+        '404': {description: The file does not exist}
     put:
       summary: Create or modify project MOTD.md
       operationId: projectMotdPut
@@ -234,15 +373,14 @@ paths:
         required: True
         description: Name of the project to import jobs into.
         type: string
-      - name: Request
+      - name: MotdUpdateRequest
         in: body
         required: True
         schema:
           properties:
             contents: {type: string}
       responses:
-        '200':
-          description: Expected response to a valid request.
+        '200': {description: Expected response to a valid request.}
     delete:
       summary: Delete project motd.md
       operationId: projectMotdDelete
@@ -253,5 +391,4 @@ paths:
         description: Name of the project to import jobs into.
         type: string
       responses:
-        '204':
-          description: No Content
+        '204': {description: No Content}

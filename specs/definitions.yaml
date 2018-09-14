@@ -176,6 +176,13 @@ TakeoverScheduleResponse:
     apiversion: {type: number}
     success:    {type: boolean}
 
+Project:
+  properties:
+    description: {type: string}
+    name:        {type: string}
+    url:         {type: string}
+    config:      {type: object}
+
 Job:
   properties:
     id:               {type: string}

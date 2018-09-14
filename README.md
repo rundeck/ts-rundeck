@@ -19,3 +19,18 @@ async function main() {
 
 main()
 ```
+
+## Building
+
+### Pre-requisites
+[`DotNet Core SDK`](https://www.microsoft.com/net/download) - Required for the Autorest backend  
+`Nodejs/npm` - Required for the Autorest frontend
+
+### Quick Start
+To generate client and compile TypeScript to `/dist`:
+```
+npm run build
+```
+
+### Slow Start
+Checkout the Autorest literate configuration [here](autorest.md).

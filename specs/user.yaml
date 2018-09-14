@@ -1,0 +1,93 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Rundeck
+  license:
+    name: MIT
+basePath: '/api/23'
+schemes:
+- http
+produces:
+- application/json
+consumes:
+- application/json
+
+paths:
+  /user/list:
+    get:
+      produces:
+        - 'application/json'
+      summary: List user profiles
+      operationId: userList
+      tags:
+      - user
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {type: array, items: { $ref: '#/definitions/User'} }
+
+  /user/info:
+    get:
+      summary: Get same user profile data
+      operationId: userProfileGet
+      tags:
+      - user
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+    post:
+      summary: Modify same user profile data
+      operationId: userProfileUpdate
+      tags:
+      - user
+      parameters:
+      - in: body
+        name: User
+        description: New user profile data
+        required: true
+        schema: {$ref: '#/definitions/ModifyUserRequest'}
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+
+  /user/info/{userID}:
+    get:
+      summary: Get another user's profile data
+      operationId: userProfileGetById
+      tags:
+      - user
+      parameters:
+      - name: userID
+        in: path
+        required: true
+        description: The ID of the user to retrieve profile information for
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+    post:
+      summary: Modify another user's profile data
+      operationId: userProfileUpdateById
+      tags:
+      - user
+      parameters:
+      - name: userID
+        in: path
+        required: true
+        description: The ID of the user to retrieve profile information for
+        type: string
+      - in: body
+        name: User
+        description: New user profile data
+        required: true
+        schema: {$ref: '#/definitions/ModifyUserRequest'}
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {$ref: '#/definitions/User'}
+
+definitions:
+  $ref: ../definitions.yaml

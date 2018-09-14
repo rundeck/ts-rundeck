@@ -1,0 +1,159 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Rundeck
+  license:
+    name: MIT
+basePath: '/api/23'
+schemes:
+- http
+produces:
+- application/json
+consumes:
+- application/json
+
+paths:
+  /project/{project}/jobs:
+    get:
+      summary: List the jobs that exist for a project
+      operationId: jobList
+      tags:
+      - project
+      - job
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Project name
+        type: string
+      - name: idList
+        in: query
+        required: false
+        description: Comma separated list of Job IDs to include
+        type: string
+      - name: groupPath
+        in: query
+        required: false
+        description: Group or partial group path to include all jobs within that group path. Set to the special value "-" to match the top level jobs only.
+        default: '*'
+        type: string
+      - name: jobFilter
+        in: query
+        required: false
+        description: A filter for the job name. Matches any job name that contains this value.
+        type: string
+      - name: jobExactFilter
+        in: query
+        required: false
+        description: An exact job name to match.
+        type: string
+      - name: groupPathExact
+        in: query
+        required: false
+        description: An exact group path to match. Set to the special value "-" to match the top level jobs only.
+        type: string
+      - name: scheduledFilter
+        in: query
+        required: false
+        description: Specify whether to return only scheduled or only not scheduled jobs.
+        type: boolean
+      - name: serverNodeUUIDFilter
+        in: query
+        required: false
+        description: In cluster mode, use to select scheduled jobs assigned to the server with the given UUID.
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema: {type: array, items: {$ref: '#/definitions/Job'}}
+
+  /job/{id}/executions:
+    post:
+      summary: Run the specified job
+      operationId: jobRun
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: ID of job to run
+        type: integer
+      - name: request
+        in: body
+        required: false
+        schema: {$ref: '#/definitions/ExecuteJobRequest'}
+      responses:
+        '200':
+          description: Expected response for a valid request
+          schema: {$ref: '#/definitions/ExecutionList'}
+  
+  /job/{jobID}/retry/{executionID}:
+    post:
+      summary: Retry a failed job execution on failed nodes only or on the same as the execution. This is the same functionality as the `Retry Failed Nodes ...` button on the execution page.
+      operationId: jobRetryExecution
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: jobID
+        in: path
+        required: true
+        type: number
+      - name: executionID
+        in: path
+        required: true
+        type: integer
+      - name: Request
+        in: body
+        required: false
+        schema: {$ref: '#/definitions/RetryExecutionRequest'}
+      responses:
+        '200':
+          description: Exected response to a valid request.
+          schema: {$ref: '#/definitions/ExecutionList'}
+
+  /job/{id}:
+    get:
+      summary: Export a single job definition in XML or YAML formats.
+      operationId: jobGet
+      tags:
+      - job
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: ID of the job to export.
+        type: integer
+      - name: format
+        in: query
+        required: false
+        type: string
+        enum: ['xml', 'yaml']
+        default: xml
+      responses:
+        '200':
+          description: Expected response to a valid request.
+          schema:
+            properties:
+              content: {type: string}
+    delete:
+      summary: Delete a single job definition.
+      operationId: jobDelete
+      tags:
+      - job
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: ID of job to delete.
+        type: number
+      responses:
+        '204':
+          description: Job was deleted.
+        '404':
+          description: Job not found.
+
+definitions:
+  $ref: ../definitions.yaml 

@@ -1,0 +1,257 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Rundeck
+  license:
+    name: MIT
+basePath: '/api/23'
+schemes:
+- http
+produces:
+- application/json
+consumes:
+- application/json
+
+paths:
+  /project/{project}/jobs/export:
+    get:
+      summary: Export the job definitions in XML or YAML formats.
+      operationId: projectJobsExport
+      tags:
+      - job
+      - project
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: The project to export jobs for.
+        type: string
+      - name: format
+        in: query
+        required: false
+        description: XML or YAML format for exported jobs.
+        type: string
+        enum: ['xml', 'yaml']
+        default: xml
+      - name: idlist
+        in: query
+        required: false
+        description: A comma-separated list of Job IDs to export.
+        type: string
+      - name: groupPath
+        in: query
+        required: false
+        description: Group or partial group path to include all jobs within that group path.
+        type: string
+      - name: jobFilter
+        in: query
+        required: false
+        description: Filter for the job Name.
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request.
+          schema: {type: string}
+
+  /project/{project}/jobs/import:
+    post:
+      summary: Import job definitions in XML or YAML formats.
+      operationId: projectJobsImport
+      tags:
+      - job
+      - project
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request.
+
+  /project/{project}/import:
+    put:
+      summary: Import project archive.
+      operationId: projectArchiveImport
+      tags:
+      - job
+      - project
+      consumes:
+         - application/zip
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      - name: jobUuidOption
+        in: query
+        type: string
+        enum: [preserve, remove]
+        default: remove
+      - name: importExecutions
+        in: query
+        type: boolean
+      - name: importConfig
+        in: query
+        type: boolean
+      - name: importACL
+        in: query
+        type: boolean
+      - name: File
+        in: body
+        required: true
+        x-ms-parameter-location: method 
+        schema:
+          type: object
+          format: file
+      responses:
+        '200':
+          description: Expected response to a valid request.
+
+  /project/{project}/export:
+    get:
+      summary: Export archive of project synchronously
+      operationId: projectArchiveExportSync
+      produces:
+      - application/zip
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      - name: executionIds
+        in: query
+        description: A list (comma-separated) of execution IDs. If this is specified then the archive will contain only executions that are specified, and will not contain Jobs, ACLs, or project configuration/readme files.
+        type: string
+      - name: exportAll
+        in: query
+        description: Export all project resources
+        type: boolean
+        default: true
+      - name: exportJobs
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportExecutions
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportConfigs
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportReadmes
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportAcls
+        in: query
+        description: Export all project resources
+        type: boolean
+      responses:
+        '200':
+          description: Zip archive
+          schema:
+            type: object
+            format: file
+
+  /project/{project}/readme.md:
+    get:
+      summary: Get the readme.md contents
+      operationId: projectReadmeGet
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '200':
+          description: readme.md contents
+          schema:
+            properties:
+              contents: {type: string}
+        '404':
+          description: The file does not exist
+    put:
+      summary: Create or modify project README.md
+      operationId: projectReadmePut
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      - name: Request
+        in: body
+        required: True
+        schema:
+          properties:
+            contents: {type: string}
+      responses:
+        '200':
+          description: Expected response to a valid request.
+    delete:
+      summary: Delete project README.md
+      operationId: projectReadmeDelete
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '204':
+          description: No Content
+
+  /project/{project}/motd.md:
+    get:
+      summary: Get the readme.md contents
+      operationId: projectMotdGet
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '200':
+          description: motd.md contents
+          schema:
+            properties:
+              contents: {type: string}
+        '404':
+          description: The file does not exist
+    put:
+      summary: Create or modify project MOTD.md
+      operationId: projectMotdPut
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      - name: Request
+        in: body
+        required: True
+        schema:
+          properties:
+            contents: {type: string}
+      responses:
+        '200':
+          description: Expected response to a valid request.
+    delete:
+      summary: Delete project motd.md
+      operationId: projectMotdDelete
+      parameters:
+      - name: project
+        in: path
+        required: True
+        description: Name of the project to import jobs into.
+        type: string
+      responses:
+        '204':
+          description: No Content

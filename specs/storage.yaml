@@ -1,0 +1,54 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Rundeck
+  license:
+    name: MIT
+basePath: '/api/23'
+schemes:
+- http
+produces:
+- application/json
+consumes:
+- application/json
+
+paths:
+  /storage/keys/{path}:
+    get:
+      summary: List resources at the specified PATH
+      description: |
+        This enpoint is impossible to describe properly in OAPI 2.0 .  
+        Depending on resources type and accepts header GET can return a list of key metadata,
+        single metadata, or the key contents.
+      operationId: storageKeyGet
+      parameters:
+      - name: path
+        in: path
+        required: True
+        description: Key path
+        type: string
+        x-ms-skip-url-encoding: true
+      - name: accept
+        in: header
+        type: string
+        default: 'application/json'
+      responses:
+        '200':
+          description: Content
+          schema: {$ref: '#/definitions/StorageKeyListResponse'}
+    delete:
+      summary: Deletes the file if it exists and returns 204 response.
+      operationId: storageKeyDelete
+      parameters:
+      - name: path
+        in: path
+        required: True
+        description: Key path
+        type: string
+        x-ms-skip-url-encoding: true
+      responses:
+        '204':
+          description: Content deleted
+
+definitions:
+  $ref: ../definitions.yaml 

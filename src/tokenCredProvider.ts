@@ -1,4 +1,4 @@
-import { ServiceClientCredentials, WebResource } from 'ms-rest-js'
+import {WebResource} from 'ms-rest-js'
 
 import {BaseCredentialProvider} from './baseCredProvider'
 

@@ -540,6 +540,35 @@ paths:
         required: True
         description: Name of the project to import jobs into.
         type: string
+      - name: executionIds
+        in: query
+        description: A list (comma-separated) of execution IDs. If this is specified then the archive will contain only executions that are specified, and will not contain Jobs, ACLs, or project configuration/readme files.
+        type: string
+      - name: exportAll
+        in: query
+        description: Export all project resources
+        type: boolean
+        default: true
+      - name: exportJobs
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportExecutions
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportConfigs
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportReadmes
+        in: query
+        description: Export all project resources
+        type: boolean
+      - name: exportAcls
+        in: query
+        description: Export all project resources
+        type: boolean
       responses:
         '200':
           description: Zip archive

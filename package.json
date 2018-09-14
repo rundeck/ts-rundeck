@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "autorest README.md",
+    "generate": "autorest autorest.md",
     "build": "npm run generate && ./node_modules/.bin/tsc"
   },
   "author": "ProTip",

@@ -4,7 +4,7 @@ Rundeck TypeScript(Javascript!) SDK
 
 ## Getting Started 
 To build the SDKs for Rundeck, simply install AutoRest via `npm` (`npm install -g autorest`) and then run:
-> `autorest README.md`
+> `autorest autorest.md`
 
 Or:
 > `npm run generate`

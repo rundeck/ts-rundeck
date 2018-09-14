@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "autorest --input-file=rundeck.yaml --typescript --output-folder=src/lib --add-credentials",
+    "generate": "autorest README.md",
     "build": "npm run generate && ./node_modules/.bin/tsc"
   },
   "author": "ProTip",

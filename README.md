@@ -2,6 +2,9 @@ Rundeck TypeScript(Javascript) SDK
 ==================================
 TypeScript SDK generated from an OpenApi 2.0 spec via Autorest.
 
+> `WARNING:` The OpenApi spec and SDK are under heavy development. The spec, methods, interfaces, and project structure
+may change heavily between releases.
+
 ## Example Usage
 
 ```ts

@@ -51,4 +51,4 @@ paths:
           description: Content deleted
 
 definitions:
-  $ref: ../definitions.yaml 
+  $ref: definitions.yaml 

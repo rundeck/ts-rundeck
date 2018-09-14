@@ -156,4 +156,4 @@ paths:
           description: Job not found.
 
 definitions:
-  $ref: ../definitions.yaml 
+  $ref: definitions.yaml 

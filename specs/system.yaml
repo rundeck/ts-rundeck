@@ -213,4 +213,4 @@ paths:
           description: Policy not found
 
 definitions:
-  $ref: ../definitions.yaml 
+  $ref: definitions.yaml 

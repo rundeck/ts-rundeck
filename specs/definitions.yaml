@@ -127,6 +127,11 @@ IncompleteFileType:
   description: Comma-separated list of filetypes which have not be uploaded, e.g. rdlog,state.json. Types are rdlog (log output), state.json (workflow state data), execution.xml (execution definition)
 
 IncompleteLogExecutions:
+  required:
+  - total
+  - max
+  - offset
+  - executions
   properties:
     total:  {type: number}
     max:    {type: number}
@@ -248,6 +253,20 @@ Execution:
     description:     {type: string}
     argstring:       {type: string}
     successfulNodes: {type: array, items: {type: string}}
+
+JobExecutionDelete:
+  properties:
+    failedCount:   {type: number}
+    successCount:  {type: number}
+    allsuccessful: {type: boolean}
+    requestCount:  {type: number}
+    failures:
+      type: array
+      items:
+        type: object
+        properties:
+          id:      {type: string}
+          message: {type: string}
 
 AclReference:
   properties:

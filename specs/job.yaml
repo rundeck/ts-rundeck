@@ -4,7 +4,7 @@ info:
   title: Rundeck
   license:
     name: MIT
-basePath: '/api/23'
+basePath: '/api/26'
 schemes:
 - http
 produces:
@@ -68,9 +68,9 @@ paths:
           schema: {type: array, items: {$ref: '#/definitions/Job'}}
 
   /job/{id}/executions:
-    post:
-      summary: Run the specified job
-      operationId: jobRun
+    get:
+      summary: List job executions
+      operationId: jobExecutionList
       tags:
       - job
       - execution
@@ -78,7 +78,23 @@ paths:
       - name: id
         in: path
         required: True
-        description: ID of job to run
+        description: Job ID
+        type: integer
+      responses:
+        '200':
+          description: List of executions for job
+          schema: {$ref: '#/definitions/ExecutionList'}
+    post:
+      summary: Run the specified job
+      operationId: jobExecutionRun
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: Job ID
         type: integer
       - name: request
         in: body
@@ -88,6 +104,22 @@ paths:
         '200':
           description: Expected response for a valid request
           schema: {$ref: '#/definitions/ExecutionList'}
+    delete:
+      summary: Delete all job executions
+      operationId: jobExecutionDelete
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: id
+        in: path
+        required: True
+        description: Job ID
+        type: integer
+      responses:
+        '204':
+          description: Content deleted
+          schema: {$ref: '#/definitions/JobExecutionDelete'}
   
   /job/{jobID}/retry/{executionID}:
     post:

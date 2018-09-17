@@ -4,7 +4,7 @@ info:
   title: Rundeck
   license:
     name: MIT
-basePath: '/api/23'
+basePath: '/api/26'
 schemes:
 - http
 produces:
@@ -13,6 +13,17 @@ consumes:
 - application/json
 
 paths:
+  /system/info:
+    get:
+      summary: Get Rundeck server information and stats
+      operationId: systemInfoGet
+      tags:
+      - system
+      responses:
+        '200':
+          description: System info response
+          schema: {$ref: '#/definitions/SystemInfo'}
+
   /system/logstorage:
     get:
       summary: Get Log Storage information and stats
@@ -89,6 +100,27 @@ paths:
       - scheduler
       - cluster
       - job
+      parameters:
+      - name: SchedulerTakeoverRequest
+        in: body
+        schema:
+          properties:
+            server:
+              type: object
+              required:
+              - uuid
+              - all
+              properties:
+                uuid: {type: string}
+                all:  {type: boolean}
+            project: {type: string}
+            job:
+              type: object
+              required:
+              - id
+              properties:
+                id: {type: string}
+
       responses:
         '200':
           description: Expected response to a valid request

@@ -4,7 +4,7 @@ info:
   title: Rundeck
   license:
     name: MIT
-basePath: '/api/23'
+basePath: '/api/26'
 schemes:
 - http
 produces:

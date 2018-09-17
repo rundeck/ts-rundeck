@@ -34,3 +34,24 @@ npm run build
 
 ### Slow Start
 Checkout the Autorest literate configuration [here](autorest.md).
+
+
+## OpenAPI Spec(OAS)
+This project is the current home of the OpenAPI specification used to generate the project.
+
+### Spec Progress
+- [x] System Info
+- [ ] List Metrics
+- [x] User Profile
+- [x] Log Storage
+- [x] Execution Mode
+- [x] Cluster Mode
+- [x] ACLs
+- [ ] Jobs
+- [ ] Executions
+- [ ] Adhoc
+- [ ] Key Storage
+- [ ] Projects
+- [ ] Listing History
+- [ ] Resources/Nodes
+- [ ] SCM

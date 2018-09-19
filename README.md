@@ -79,7 +79,7 @@ This project is the current home of the OpenAPI specification used to generate t
   - [x] Getting Project Info
   - [x] Project Deletion
   - [x] Project Configuration
-  - [x ] Project Configuration Keys
+  - [x] Project Configuration Keys
   - [x] Project Archive Export
   - [ ] Project Archive Export Async
   - [ ] Project Archive Export Status

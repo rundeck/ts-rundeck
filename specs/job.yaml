@@ -277,7 +277,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Job executions disabled
+          description: Job schedule enabled
           schema:
             properties: {success: {type: boolean}}
 
@@ -295,7 +295,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Job executions disabled
+          description: Job schedules disabled
           schema:
             properties: {success: {type: boolean}}
 

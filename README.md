@@ -49,9 +49,39 @@ This project is the current home of the OpenAPI specification used to generate t
 - [x] ACLs
 - [x] Jobs
 - [ ] Executions
+  - [x] Get Executions for a Job
+  - [x] Delete all Executions for a Job
+  - [ ] Listing Running Executions
+  - [ ] Execution Info
+  - [ ] List Input Files for an Execution
+  - [ ] Delete an Execution
+  - [ ] Bulk Delete Executions
+  - [ ] Execution Query
+  - [ ] Execution State
+  - [ ] Execution Output
+  - [ ] Execution Output with State
+  - [ ] Aborting Executions
 - [ ] Adhoc
 - [ ] Key Storage
+  - [ ] Upload keys
+  - [x] List keys
+  - [ ] Get Key Metadata
+  - [ ] Get Key Contents
+  - [x] Delete Keys
 - [ ] Projects
+  - [x] Listing Projects
+  - [x] Project Creation
+  - [x] Getting Project Info
+  - [x] Project Deletion
+  - [x] Project Configuration
+  - [x ] Project Configuration Keys
+  - [x] Project Archive Export
+  - [ ] Project Archive Export Async
+  - [ ] Project Archive Export Status
+  - [x] Project Archive Import
+  - [ ] Updating and Listing Resources for a Project
+  - [x] Project Readme File
+  - [ ] Project ACLs
 - [ ] Listing History
 - [ ] Resources/Nodes
 - [ ] SCM

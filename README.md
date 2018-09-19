@@ -42,6 +42,7 @@ This project is the current home of the OpenAPI specification used to generate t
 ### Spec Progress
 - [x] System Info
 - [ ] List Metrics
+  - [x] List Metrics
 - [x] User Profile
 - [x] Log Storage
 - [x] Execution Mode

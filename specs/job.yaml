@@ -79,7 +79,7 @@ paths:
         in: path
         required: True
         description: Job ID
-        type: integer
+        type: string
       responses:
         '200':
           description: List of executions for job
@@ -132,7 +132,7 @@ paths:
       - name: jobID
         in: path
         required: true
-        type: number
+        type: string
       - name: executionID
         in: path
         required: true
@@ -157,7 +157,7 @@ paths:
         in: path
         required: True
         description: ID of the job to export.
-        type: integer
+        type: string
       - name: format
         in: query
         required: false
@@ -186,6 +186,274 @@ paths:
           description: Job was deleted.
         '404':
           description: Job not found.
+
+  /job/{id}/info:
+    get:
+      summary: Get metadata about a specific job.
+      operationId: jobInfoGet
+      tags:
+      - job
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Expected response to a valid request.
+          schema: {$ref: '#/definitions/JobMetadata'}
+
+  /jobs/delete:
+    post:
+      summary: Delete multiple job definitions at once
+      operationId: jobBulkDelete
+      tags:
+      - job
+      - bulk
+      parameters:
+      - name: JobBulkDeleteRequest
+        in: body
+        required: true
+        schema:
+          required:
+          - ids
+          properties:
+            ids:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: Job deleted response
+          schema: {$ref: '#/definitions/JobBulkOperationResponse'}
+
+  /job/{id}/execution/enable:
+    post:
+      summary: Enable executions for a job. (ACL requires toggle_execution action for a job.)
+      operationId: jobExecutionEnable
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Job executions enabled
+          schema:
+            properties: {success: {type: boolean}}
+
+  /job/{id}/execution/disable:
+    post:
+      summary: Disable all executions for a job (scheduled or manual). (ACL requires toggle_execution action for a job.)
+      operationId: jobExecutionDisable
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Job executions disabled
+          schema:
+            properties: {success: {type: boolean}}
+
+  /job/{id}/schedule/enable:
+    post:
+      summary: Enable the schedule for a job. (ACL requires toggle_schedule action for a job.)
+      operationId: jobScheduleEnable
+      tags:
+      - job
+      - schedule
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Job executions disabled
+          schema:
+            properties: {success: {type: boolean}}
+
+  /job/{id}/schedule/disable:
+    post:
+      summary: Disable the schedule for a job. (ACL requires toggle_schedule action for a job.)
+      operationId: jobScheduleDisable
+      tags:
+      - job
+      - schedule
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Job executions disabled
+          schema:
+            properties: {success: {type: boolean}}
+
+  /jobs/execution/enable:
+    post:
+      summary: Bulk enable job executions
+      operationId: jobExecutionBulkEnable
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: JobExecutionBulkEnableRequest
+        in: body
+        required: true
+        schema:
+          required:
+          - ids
+          properties:
+            ids:
+              type: array
+              items: {type: string}
+      responses:
+        '200':
+          description: Job deleted response
+          schema: {$ref: '#/definitions/JobBulkOperationResponse'}
+
+  /jobs/execution/disable:
+    post:
+      summary: Bulk disable job executions
+      operationId: jobExecutionBulkDisable
+      tags:
+      - job
+      - execution
+      parameters:
+      - name: JobExecutionBulkDisableRequest
+        in: body
+        required: true
+        schema:
+          required:
+          - ids
+          properties:
+            ids:
+              type: array
+              items: {type: string}
+      responses:
+        '200':
+          description: Job toggle execution response
+          schema: {$ref: '#/definitions/JobBulkOperationResponse'}
+
+  /jobs/schedule/enable:
+    post:
+      summary: Bulk enable job schedule
+      operationId: jobScheduleBulkEnable
+      tags:
+      - job
+      - schedule
+      parameters:
+      - name: JobScheduleBulkEnableRequest
+        in: body
+        required: true
+        schema:
+          required:
+          - ids
+          properties:
+            ids:
+              type: array
+              items: {type: string}
+      responses:
+        '200':
+          description: Job toggle schedule response
+          schema: {$ref: '#/definitions/JobBulkOperationResponse'}
+
+  /jobs/schedule/disable:
+    post:
+      summary: Bulk disable job schedule
+      operationId: jobScheduleBulkDisable
+      tags:
+      - job
+      - schedule
+      parameters:
+      - name: JobScheduleBulkDisableRequest
+        in: body
+        required: true
+        schema:
+          required:
+          - ids
+          properties:
+            ids:
+              type: array
+              items: {type: string}
+      responses:
+        '200':
+          description: Job toggle schedule response
+          schema: {$ref: '#/definitions/JobBulkOperationResponse'}
+
+  /job/{id}/input/file:
+    post:
+      summary: Upload file as job option
+      operationId: jobInputFileUpload
+      tags:
+      - job
+      consumes:
+        - octet/stream
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+      - name: optionName
+        in: query
+        required: true
+        type: string
+      - name: fileName
+        in: query
+        required: true
+        type: string
+      - name: File
+        in: body
+        required: true
+        x-ms-parameter-location: method
+        schema:
+          type: object
+          format: file
+      responses:
+        '200':
+          description: Yay
+
+  /job/{id}/input/files:
+    get:
+      summary: List uploaded input files for job
+      operationId: jobInputFileUpload
+      tags:
+      - job
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: List of input files
+          schema: {$ref: '#/definitions/JobInputFileListResponse'}
+
+  /jobs/file/{id}:
+    get:
+      summary: Get job input file info
+      operationId: jobInputFileInfoGet
+      tags:
+      - job
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Job input file info
+          schema: {$ref: '#/definitions/JobInputFileInfo'}
 
 definitions:
   $ref: definitions.yaml 

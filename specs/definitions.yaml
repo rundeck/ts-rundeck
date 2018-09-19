@@ -217,22 +217,80 @@ JobMetadata:
     averageDuration:  {type: number}
     options:          {type: object}
 
-DeleteJobResponse:
+JobBulkOperationResponse:
+  required:
+  - requestCount
+  - allsuccessful
   properties:
     requestCount:
       description: The number of job IDs that were in the delete request.
       type: number
     allsuccessful: {type: boolean}
-    
+    succeeded:
+      type: array
+      items: {$ref: '#/definitions/BulkJobSucceededInfo'}
+    failed:
+      type: array
+      items: {$ref: '#/definitions/BulkJobFailedInfo'}
+
+JobInputFileListResponse:
+  required:
+  - paging
+  - files
+  properties:
+    paging: {$ref: '#/definitions/Paging'}
+    files:
+      type: array
+      items: {$ref: '#/definitions/JobInputFileInfo'}
+  
+
+JobInputFileInfo:
+  required:
+  - id
+  - user
+  - fileState
+  - sha
+  - jobId
+  - dateCreated
+  - serverNodeUUID
+  - fileName
+  - expirationDate
+  - exec
+  properties:
+    id:              {type: string}
+    user:            {type: string}
+    fileState:       {type: string, enum: [temp, deleted, expired, retained]}
+    sha:             {type: string}
+    jobId:           {type: string}
+    dateCreated:     {type: string}
+    serverNodeUUID:  {type: string}
+    fileName:        {type: string}
+    size:            {type: integer}
+    expirationDate:  {type: string}
+    execId:          {type: string}
+
+BulkJobSucceededInfo:
+  required:
+  - id
+  - message
+  properties:
+    id:        {type: string}
+    message:   {type: string}
+
+BulkJobFailedInfo:
+  required:
+  - id
+  - message
+  - errorCode
+  properties:
+    id:        {type: string}
+    errorCode: {type: string}
+    message:   {type: string}
+
 
 ExecutionList:
   properties:
-    paging:
-      properties:
-        count:  {type: number}
-        total:  {type: number}
-        offset: {type: number}
-        max:    {type: number}
+    paging: {$ref: '#/definitions/Paging'}
     executions: {type: array, items: {$ref: '#/definitions/Execution'}}
 
 Execution:
@@ -358,3 +416,10 @@ StorageKeyListResponse:
     url:  {type: string}
     type: {type: string}
     path: {type: string}
+
+Paging:
+  properties:
+    count:  {type: integer}
+    total:  {type: integer}
+    offset: {type: integer}
+    max:    {type: integer}

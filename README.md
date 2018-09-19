@@ -47,7 +47,7 @@ This project is the current home of the OpenAPI specification used to generate t
 - [x] Execution Mode
 - [x] Cluster Mode
 - [x] ACLs
-- [ ] Jobs
+- [x] Jobs
 - [ ] Executions
 - [ ] Adhoc
 - [ ] Key Storage

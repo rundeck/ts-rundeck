@@ -16,10 +16,10 @@
     "url" : "https://github.com/rundeck/ts-rundeck"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "ms-rest-js": "^0.21.406"
   },
   "devDependencies": {
-    "ms-rest-js": "^0.21.406",
     "ts-node": "^6.0.3",
     "typescript": "^3.0.3"
   }

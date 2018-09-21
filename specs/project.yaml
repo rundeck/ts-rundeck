@@ -44,7 +44,7 @@ paths:
             name:   {type: string}
             config: {type: object}
       responses:
-        '200': {description: Project created}
+        '201': {description: Project created}
 
   /project/{project}:
     get:

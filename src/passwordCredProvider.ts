@@ -16,7 +16,7 @@ export class PasswordCredentialProvider extends BaseCredentialProvider {
             maxRedirects: 0,
             validateStatus: c => c >= 300 && c < 400
         })
-        webResource.headers.set('cookie', resp.headers['set-cookie'])
+        webResource.headers.set('cookie', resp.headers['set-cookie'].join(';'))
         return webResource
     }
 }

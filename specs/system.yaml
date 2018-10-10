@@ -158,7 +158,7 @@ paths:
           description: Expected response to a valid request
           schema: {type: array, items: {$ref: '#/definitions/Job'}}
 
-  /system/acl:
+  /system/acl/:
     get:
       summary: List ACL Policies
       operationId: systemAclPolicyList
@@ -199,6 +199,14 @@ paths:
         required: True
         description: Policy file name
         type: string
+      - name: SystemAclPolicyCreateRequest
+        in: body
+        schema:
+          required:
+          - contents
+          properties:
+            contents:
+              type: string
       responses:
         '201':
           description: Created
@@ -220,6 +228,14 @@ paths:
         required: True
         description: Policy file name
         type: string
+      - name: SystemAclPolicyUpdateRequest
+        in: body
+        schema:
+          required:
+          - contents
+          properties:
+            contents:
+              type: string
       responses:
         '200':
           description: Expected response to a valid request

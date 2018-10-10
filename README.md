@@ -68,10 +68,10 @@ This project is the current home of the OpenAPI specification used to generate t
   - [ ] Aborting Executions
 - [ ] Adhoc
 - [ ] Key Storage
-  - [ ] Upload keys
+  - [x] Upload keys
   - [x] List keys
   - [ ] Get Key Metadata
-  - [ ] Get Key Contents
+  - [x] Get Key Contents
   - [x] Delete Keys
 - [ ] Projects
   - [x] Listing Projects

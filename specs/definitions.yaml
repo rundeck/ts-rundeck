@@ -341,8 +341,10 @@ AclList:
     resources:  {type: array, items: {$ref: '#/definitions/AclReference'}}
 
 AclPolicyResponse:
+  required:
+  - contents
   properties:
-    content:
+    contents:
       type: string
       description: Policy as JSON encoded YAML string
 

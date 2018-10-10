@@ -21,6 +21,8 @@ paths:
         Depending on resources type and accepts header GET can return a list of key metadata,
         single metadata, or the key contents.
       operationId: storageKeyGet
+      tags:
+      - storage
       parameters:
       - name: path
         in: path
@@ -36,9 +38,63 @@ paths:
         '200':
           description: Content
           schema: {$ref: '#/definitions/StorageKeyListResponse'}
+        '404':
+          description: No content found at this location
+    post:
+      summary: Set storage key contents
+      operationId: storageKeyCreate
+      tags:
+      - storage
+      consumes:
+        - application/pgp-keys
+      parameters:
+      - name: path
+        in: path
+        required: True
+        description: Key path
+        type: string
+        x-ms-skip-url-encoding: true
+      - name: File
+        in: body
+        required: true
+        x-ms-parameter-location: method
+        schema:
+          type: object
+          format: file
+      responses:
+        '201':
+          description: Content created
+        '409':
+          description: Resource already exists
+    put:
+      summary: Set storage key contents
+      operationId: storageKeyUpdate
+      tags:
+      - storage
+      consumes:
+        - application/pgp-keys
+      parameters:
+      - name: path
+        in: path
+        required: True
+        description: Key path
+        type: string
+        x-ms-skip-url-encoding: true
+      - name: File
+        in: body
+        required: true
+        x-ms-parameter-location: method
+        schema:
+          type: object
+          format: file
+      responses:
+        '200':
+          description: Content updated
     delete:
       summary: Deletes the file if it exists and returns 204 response.
       operationId: storageKeyDelete
+      tags:
+      - storage
       parameters:
       - name: path
         in: path

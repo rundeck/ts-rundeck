@@ -56,12 +56,12 @@ This project is the current home of the OpenAPI specification used to generate t
 - [ ] Executions
   - [x] Get Executions for a Job
   - [x] Delete all Executions for a Job
-  - [ ] Listing Running Executions
-  - [ ] Execution Info
-  - [ ] List Input Files for an Execution
-  - [ ] Delete an Execution
-  - [ ] Bulk Delete Executions
-  - [ ] Execution Query
+  - [x] Listing Running Executions
+  - [x] Execution Info
+  - [x] List Input Files for an Execution
+  - [x] Delete an Execution
+  - [x] Bulk Delete Executions
+  - [x] Execution Query
   - [ ] Execution State
   - [ ] Execution Output
   - [ ] Execution Output with State

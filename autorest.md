@@ -22,6 +22,7 @@ The following are the settings for this using this API with AutoRest.
 Defines the Open API spec file(s) to use for input:
 ```yaml
 input-file:
+- ./specs/execution.yaml
 - ./specs/job.yaml
 - ./specs/metric.yaml
 - ./specs/project.yaml

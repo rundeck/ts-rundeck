@@ -32,7 +32,6 @@ export class RundeckBrowser extends Rundeck {
                 const accept = options.headers.get('Accept')
                 if (!accept) {
                     options.headers.set('Accept', 'application/json; charset=utf-8')
-                    options.headers.set('Content-Type', 'application/json; charset=utf-8')
                 }
             }
 

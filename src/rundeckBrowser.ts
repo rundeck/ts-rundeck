@@ -1,4 +1,4 @@
-import {WebResource, HttpOperationResponse, RequestPrepareOptions, ServiceClientOptions} from 'ms-rest-js'
+import {WebResource, HttpOperationResponse, RequestPrepareOptions, ServiceClientOptions, RestError} from 'ms-rest-js'
 
 import {BaseCredentialProvider} from './baseCredProvider'
 
@@ -24,8 +24,9 @@ export class RundeckBrowser extends Rundeck {
     sendRequest(options: RequestPrepareOptions | WebResource): Promise<HttpOperationResponse> {
         console.log(this.requestContentType)
         /** We must run one request at a time in order to ensure tokens are valid */
-        return this.queue.add( () => {
+        let reqAction = () => {
             if (options instanceof WebResource) {
+                options.headers.set('X-RUNDECK-AJAX', 'true')
                 options.headers.set('X-RUNDECK-TOKEN-URI', this.uri!)
                 options.headers.set('X-RUNDECK-TOKEN-KEY', this.token!)
                 const accept = options.headers.get('Accept')
@@ -37,16 +38,28 @@ export class RundeckBrowser extends Rundeck {
 
             const respProm = super.sendRequest(options)
 
-            return new Promise((res, rej) => {
+            return new Promise<HttpOperationResponse>((res, rej) => {
                 respProm.then( resp => {
-                    this.token = resp.headers.get('X-RUNDECK-TOKEN-KEY') || null
-                    this.uri = resp.headers.get('X-RUNDECK-TOKEN-URI') || null
-                    console.log(this.token)
+                    this.updateTokensFromResponse(resp)
                     res(resp)
                 }).catch( (e) => {
+                    const ex = e as RestError
+                    if (ex.response)
+                        this.updateTokensFromResponse(ex.response)
+
                     rej(e)
                 })
             })
-        })
+        }
+
+        if (options.method == 'GET')
+            return reqAction()
+        else
+            return this.queue.add(reqAction)
+    }
+
+    private updateTokensFromResponse(resp: HttpOperationResponse) {
+        this.token = resp.headers.get('X-RUNDECK-TOKEN-KEY') || this.token
+        this.uri = resp.headers.get('X-RUNDECK-TOKEN-URI') || this.token
     }
 }

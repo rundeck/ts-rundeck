@@ -22,7 +22,7 @@ export class RundeckBrowser extends Rundeck {
     }
 
     sendRequest(options: RequestPrepareOptions | WebResource): Promise<HttpOperationResponse> {
-        console.log(this.requestContentType)
+        // options.url = `${this.baseUri}/${options.url}`
         /** We must run one request at a time in order to ensure tokens are valid */
         let reqAction = () => {
             if (options instanceof WebResource) {
@@ -32,6 +32,12 @@ export class RundeckBrowser extends Rundeck {
                 const accept = options.headers.get('Accept')
                 if (!accept) {
                     options.headers.set('Accept', 'application/json; charset=utf-8')
+                }
+            } else {
+                options.headers = {
+                    'X-RUNDECK-AJAX': 'true',
+                    'X-RUNDECK-TOKEN-URI': this.uri!,
+                    'X-RUNDECK-TOKEN-KEY': this.token!,
                 }
             }
 

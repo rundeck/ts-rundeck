@@ -63,8 +63,8 @@ export class RundeckBrowser extends Rundeck {
             return this.queue.add(reqAction)
     }
 
-    private updateTokensFromResponse(resp: HttpOperationResponse) {
+    private updateTokensFromResponse = (resp: HttpOperationResponse) => {
         this.token = resp.headers.get('X-RUNDECK-TOKEN-KEY') || this.token
-        this.uri = resp.headers.get('X-RUNDECK-TOKEN-URI') || this.token
+        this.uri = resp.headers.get('X-RUNDECK-TOKEN-URI') || this.uri
     }
 }

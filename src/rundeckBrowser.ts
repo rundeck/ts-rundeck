@@ -28,17 +28,24 @@ export class RundeckBrowser extends Rundeck {
         let reqAction = () => {
             if (options instanceof WebResource) {
                 options.headers.set('X-RUNDECK-AJAX', 'true')
-                options.headers.set('X-RUNDECK-TOKEN-URI', this.uri!)
-                options.headers.set('X-RUNDECK-TOKEN-KEY', this.token!)
                 const accept = options.headers.get('Accept')
                 if (!accept) {
                     options.headers.set('Accept', 'application/json; charset=utf-8')
                 }
+
+                if(options.method !== 'GET'){
+                    options.headers.set('X-RUNDECK-TOKEN-URI', this.uri!)
+                    options.headers.set('X-RUNDECK-TOKEN-KEY', this.token!)
+                }
             } else {
                 options.headers = {
                     'X-RUNDECK-AJAX': 'true',
-                    'X-RUNDECK-TOKEN-URI': this.uri!,
-                    'X-RUNDECK-TOKEN-KEY': this.token!,
+                    'Accept': 'application/json; charset=utf-8',
+                }
+
+                if(options.method !== 'GET'){
+                    options.headers['X-RUNDECK-TOKEN-URI'] = this.uri!
+                    options.headers['X-RUNDECK-TOKEN-KEY'] = this.token!
                 }
             }
 

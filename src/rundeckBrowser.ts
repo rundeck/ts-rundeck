@@ -15,9 +15,10 @@ export class RundeckBrowser extends Rundeck {
     queue: Queue
 
     constructor(token: string | null, uri: string, baseUri?: string, options?: ServiceClientOptions) {
-        super(new BaseCredentialProvider(), baseUri, options)
+        super(new BaseCredentialProvider(), options)
         this.token = token
         this.uri = uri
+        this.baseUri = baseUri
         this.queue = new Queue(1, Infinity)
     }
 

@@ -41,3 +41,9 @@ Add credential provider parameter to client constructor:
 ```yaml
 add-credentials: true
 ```
+
+## TypeScript settings:
+```yaml $(typescript)
+use:
+- '@microsoft.azure/autorest.typescript@2.0.597'
+```

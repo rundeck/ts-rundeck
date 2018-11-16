@@ -3,6 +3,7 @@ import {WebResource, HttpOperationResponse, RequestPrepareOptions, ServiceClient
 import {BaseCredentialProvider} from './baseCredProvider'
 
 import {Rundeck} from './index'
+import {RundeckOptions} from './lib/models'
 
 import Queue from 'promise-queue'
 
@@ -14,11 +15,10 @@ export class RundeckBrowser extends Rundeck {
     uri: string | null
     queue: Queue
 
-    constructor(token: string | null, uri: string, baseUri?: string, options?: ServiceClientOptions) {
-        super(new BaseCredentialProvider(), options)
+    constructor(token: string | null, uri: string, baseUri?: string, options?: RundeckOptions) {
+        super(new BaseCredentialProvider(), {...options, baseUri: baseUri})
         this.token = token
         this.uri = uri
-        this.baseUri = baseUri
         this.queue = new Queue(1, Infinity)
     }
 

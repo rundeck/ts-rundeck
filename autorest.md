@@ -34,7 +34,7 @@ input-file:
 Sets the generated TypeScript code output directory:
 ```yaml
 typescript:
-  output-folder: src/lib
+  output-folder: src
 ```
 
 Add credential provider parameter to client constructor:

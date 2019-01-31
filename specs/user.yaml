@@ -89,5 +89,23 @@ paths:
           description: Expected response to a valid request
           schema: {$ref: '#/definitions/User'}
 
+  /user/roles:
+    get:
+      summary: List the roles of the authenticated user
+      operationId: userRoleList
+      tags:
+      - user
+      - roles
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema:
+            required:
+            - roles
+            properties:
+              roles:
+                type: array
+                items: {type: string}
+
 definitions:
   $ref: definitions.yaml

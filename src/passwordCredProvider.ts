@@ -12,7 +12,11 @@ export class PasswordCredentialProvider extends BaseCredentialProvider {
     async signRequest(webResource: WebResource) {
         await super.signRequest(webResource)
         const {username, password} = this
-        const resp = await Axios.post(`${this.baseUri}/j_security_check?j_username=${username}&j_password=${password}`, null, {
+        const resp = await Axios.post(`${this.baseUri}/j_security_check`, null, {
+            params: {
+                'j_username': username,
+                'j_password': password,
+            },
             maxRedirects: 0,
             validateStatus: c => c >= 300 && c < 400
         })

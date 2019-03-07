@@ -45,5 +45,5 @@ add-credentials: true
 ## TypeScript settings:
 ```yaml $(typescript)
 use:
-- '@microsoft.azure/autorest.typescript@2.0.597'
+- '@microsoft.azure/autorest.typescript@3.0.1'
 ```

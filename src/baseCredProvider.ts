@@ -1,4 +1,4 @@
-import { ServiceClientCredentials, WebResource } from 'ms-rest-js'
+import { ServiceClientCredentials, WebResource } from '@azure/ms-rest-js'
 
 export class BaseCredentialProvider implements ServiceClientCredentials {
     signRequest(webResource: WebResource) {

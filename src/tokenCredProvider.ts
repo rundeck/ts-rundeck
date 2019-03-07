@@ -1,4 +1,4 @@
-import {WebResource} from 'ms-rest-js'
+import {WebResource} from '@azure/ms-rest-js'
 
 import {BaseCredentialProvider} from './baseCredProvider'
 

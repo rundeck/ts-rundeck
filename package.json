@@ -1,6 +1,6 @@
 {
   "name": "ts-rundeck",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Rundeck TypeScript SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,14 +16,15 @@
     "url": "https://github.com/rundeck/ts-rundeck"
   },
   "dependencies": {
+    "@azure/ms-rest-js": "1.7.0",
     "@types/promise-queue": "^2.2.0",
     "axios": "^0.18.0",
-    "ms-rest-js": "^0.21.406",
     "promise-queue": "^2.2.5"
   },
   "devDependencies": {
+    "@types/node": "^11.10.5",
     "ts-node": "^6.0.3",
-    "typescript": "^3.0.3"
+    "typescript": "3.3.3333"
   },
   "files": [
     "dist/**/*",

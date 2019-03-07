@@ -1,4 +1,4 @@
-import {WebResource, HttpOperationResponse, RequestPrepareOptions, ServiceClientOptions, RestError} from 'ms-rest-js'
+import {WebResource, HttpOperationResponse, RequestPrepareOptions, ServiceClientOptions, RestError} from '@azure/ms-rest-js'
 
 import {BaseCredentialProvider} from './baseCredProvider'
 

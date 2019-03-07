@@ -35,6 +35,7 @@ Sets the generated TypeScript code output directory:
 ```yaml
 typescript:
   output-folder: src
+  enum-types: true
 ```
 
 Add credential provider parameter to client constructor:

@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^11.10.5",
+    "autorest": "2.0.4283",
     "ts-node": "^6.0.3",
     "typescript": "3.3.3333"
   },

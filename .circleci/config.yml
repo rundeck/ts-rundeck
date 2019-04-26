@@ -1,0 +1,10 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: rundeck/ci@sha256:5d0d0d72eb6d1706e2ff9e906fdb2cb8b770da0919198ecbf5ffc0b71bcaf153
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run build

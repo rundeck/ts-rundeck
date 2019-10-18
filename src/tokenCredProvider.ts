@@ -10,6 +10,7 @@ export class TokenCredentialProvider extends BaseCredentialProvider {
     async signRequest(webResource: WebResource) {
         await super.signRequest(webResource)
         webResource.headers.set('X-Rundeck-Auth-Token', this.token)
+        webResource.headers.set('Accept', 'application/json; charset=utf-8')
         return webResource
     }
 }

@@ -1,5 +1,7 @@
 export * from './lib/rundeck'
 export * from './lib/rundeckContext'
 export * from './passwordCredProvider'
+export * from './passwordCredPolicy'
 export * from './rundeckBrowser'
+export * from './rundeckPassword'
 export * from './tokenCredProvider'

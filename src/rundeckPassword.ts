@@ -1,13 +1,13 @@
 import { BaseCredentialProvider } from "./baseCredProvider"
-import { Rundeck } from "."
 import { RundeckOptions } from "./lib/models"
 import { passwordAuthPolicy } from "./passwordCredPolicy"
 import { isArray } from "util"
+import { RundeckClient } from "./RundeckClient"
 
 /**
  * Create Rundeck client configured for password authentication
  */
-export function rundeckPasswordAuth(username: string, password: string, opts: RundeckOptions): Rundeck {
+export function rundeckPasswordAuth(username: string, password: string, opts: RundeckOptions): RundeckClient {
     if (!opts.baseUri)
         throw new Error('Must supplie opts.baseUri')
 
@@ -22,7 +22,7 @@ export function rundeckPasswordAuth(username: string, password: string, opts: Ru
         return [...policies, ...def]
     }
 
-    return new Rundeck(
+    return new RundeckClient(
         new BaseCredentialProvider(),
         opts
     )

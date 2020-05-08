@@ -2,15 +2,15 @@ import {WebResource, HttpOperationResponse, RequestPrepareOptions, RestError} fr
 
 import {BaseCredentialProvider} from './baseCredProvider'
 
-import {Rundeck} from './index'
 import {RundeckOptions} from './lib/models'
 
 import Queue from 'promise-queue'
+import { RundeckClient } from './RundeckClient'
 
 /**
  * Client for use in Rundeck UI
  */
-export class RundeckBrowser extends Rundeck {
+export class RundeckBrowser extends RundeckClient {
     token: string | null
     uri: string | null
     queue: Queue

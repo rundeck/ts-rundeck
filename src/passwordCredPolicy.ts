@@ -34,8 +34,10 @@ export class PasswordAuthPolicy extends BaseRequestPolicy {
         if (! context.loginRequest)
             context.loginRequest = this.login({cookie: combineCookies(webResCookies, []).join(';')})
 
+        const loginRequest = context.loginRequest
+
         try {
-            const loginResp = await context.loginRequest
+            const loginResp = await loginRequest
             const loginCookies = loginResp.headers['set-cookie']
             const cookieHeader = combineCookies(webResCookies, loginCookies).join(';')
             webResource.headers.set('cookie', cookieHeader)
@@ -44,6 +46,7 @@ export class PasswordAuthPolicy extends BaseRequestPolicy {
             return resp
         } catch(e) {
             const ex = e as Error
+            console.log(e)
             context.loginRequest = undefined
             throw ex
         }

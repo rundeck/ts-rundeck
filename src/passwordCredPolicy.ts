@@ -46,7 +46,6 @@ export class PasswordAuthPolicy extends BaseRequestPolicy {
             return resp
         } catch(e) {
             const ex = e as Error
-            console.log(e)
             context.loginRequest = undefined
             throw ex
         }

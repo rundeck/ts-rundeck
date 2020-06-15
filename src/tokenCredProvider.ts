@@ -1,4 +1,4 @@
-import {WebResource} from '@azure/ms-rest-js'
+import {WebResourceLike} from '@azure/ms-rest-js'
 
 import {BaseCredentialProvider} from './baseCredProvider'
 
@@ -7,10 +7,9 @@ export class TokenCredentialProvider extends BaseCredentialProvider {
         super()
     }
 
-    async signRequest(webResource: WebResource) {
+    async signRequest(webResource: WebResourceLike) {
         await super.signRequest(webResource)
         webResource.headers.set('X-Rundeck-Auth-Token', this.token)
-        webResource.headers.set('Accept', 'application/json; charset=utf-8')
         return webResource
     }
 }

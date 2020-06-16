@@ -55,14 +55,16 @@ export class RundeckVcr {
         }
 
         for (let [key, recs] of respMap.entries()) {
+            const rawUrl = new URL(recs[0].request.url)
+            const matchUrl = `${rawUrl.pathname}${rawUrl.search}`
             fetchMock.mock({
-                url: recs[0].request.url,
+                url: matchUrl,
                 method: recs[0].request.method
             }, async (url, opts) => {
                 const {response} = recs.shift()!
-                console.log('Delaying...')
+
                 await new Promise((res, rej) => setTimeout(res, response.delay))
-                console.log('Delayed')
+
                 return {
                     body: response.body,
                     status: response.status,
@@ -90,28 +92,15 @@ export class RundeckVcr {
 
         const start = Date.now()
         const resp = await this.realFetch(input, init)
-        const respClone = resp.clone()
         const delay = Date.now() - start
-        this.cassette!.record({
-            request: {
-                url: request.url,
-                method: request.method,
-                headers: Array.from(request.headers),
-                body: await request.text(),
-            },
-            response: {
-                url: respClone.url,
-                ok: respClone.ok,
-                status: respClone.status,
-                statusText: respClone.statusText,
-                type: respClone.type,
-                redirected: respClone.redirected,
-                body: await respClone.text(),
-                headers: Array.from(respClone.headers),
-                delay
-            }
-        })
+
+        this.processCall(request.clone(), resp.clone(), delay)
+
         return resp
+    }
+
+    processCall(request: Request, response: Response, delay: number) {
+        this.cassette!.record(request, response, delay)
     }
 }
 
@@ -124,6 +113,7 @@ export class Cassette {
     urls: Array<string | RegExp>
     file: string
     records: Array<CassetteRecord> = []
+    pendingRecords: Array<Promise<CassetteRecord>> = []
 
     constructor(urls: Array<string | RegExp>, file: string) {
         this.urls = urls
@@ -154,11 +144,31 @@ export class Cassette {
         return false
     }
 
-    record(rec: CassetteRecord) {
-        this.records.push(rec)
+    record(request: Request, response: Response, delay: number) {
+        const processor = async () => ({
+            request: {
+                url: request.url,
+                method: request.method,
+                headers: Array.from(request.headers),
+                body: await request.text(),
+            },
+            response: {
+                url: response.url,
+                ok: response.ok,
+                status: response.status,
+                statusText: response.statusText,
+                type: response.type,
+                redirected: response.redirected,
+                body: await response.text(),
+                headers: Array.from(response.headers),
+                delay
+            }
+        })
+
+        this.pendingRecords.push(processor())
     }
 
     async store() {
-        await FS.writeFile(this.file, JSON.stringify(this.records, null, '  '))
+        await FS.writeFile(this.file, JSON.stringify(await Promise.all(this.pendingRecords), null, '  '))
     }
 }

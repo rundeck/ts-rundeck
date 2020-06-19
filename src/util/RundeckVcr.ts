@@ -25,10 +25,12 @@ export interface RequestRecord {
 }
 
 export class RundeckVcr {
+    fetchMock: typeof import('fetch-mock')
     realFetch: typeof global.fetch
     cassette?: Cassette
 
-    constructor() {
+    constructor(fetchMock: typeof import('fetch-mock')) {
+        this.fetchMock = fetchMock
         this.realFetch = global.fetch
     }
 
@@ -37,11 +39,10 @@ export class RundeckVcr {
         global.fetch = this.recordIntercept
     }
 
-    async play(cassette: Cassette, fetchMock?: typeof import('fetch-mock')) {
-        if (!fetchMock) {
-            fetchMock = (await import('fetch-mock')).default
-            console.log(fetchMock)
-        }
+    play(cassette: Cassette, fetchMock?: typeof import('fetch-mock')) {
+        this.cassette = cassette
+
+        const mock = fetchMock || this.fetchMock
 
         const respMap = new Map<string, CassetteRecord[]>()
 
@@ -57,11 +58,20 @@ export class RundeckVcr {
         for (let [key, recs] of respMap.entries()) {
             const rawUrl = new URL(recs[0].request.url)
             const matchUrl = `${rawUrl.pathname}${rawUrl.search}`
-            fetchMock.mock({
-                url: matchUrl,
-                method: recs[0].request.method
-            }, async (url, opts) => {
-                const {response} = recs.shift()!
+
+            const matcher = (url: string) => {
+                try {
+                    const parsedUrl = new URL(url)
+                    const normalizedUrl = `${parsedUrl.pathname}${parsedUrl.search}`
+                    return normalizedUrl == matchUrl
+                } catch(e) {}
+                return url == matchUrl
+            }
+
+            const responses = [...recs]
+
+            mock.mock(matcher, async (url, opts) => {
+                const {response} =responses.shift()!
 
                 await new Promise((res, rej) => setTimeout(res, response.delay))
 
@@ -99,6 +109,11 @@ export class RundeckVcr {
         return resp
     }
 
+    rewind() {
+        this.fetchMock.restore()
+        this.play(this.cassette!)
+    }
+
     processCall(request: Request, response: Response, delay: number) {
         this.cassette!.record(request, response, delay)
     }
@@ -121,7 +136,6 @@ export class Cassette {
     }
 
     static async Load(file: string) {
-        console.log(FS.readFile)
         const rawRecords = await FS.readFile(file)
         const cassette = new Cassette([], file)
         cassette.records = JSON.parse(rawRecords.toString())

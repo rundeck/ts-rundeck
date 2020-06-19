@@ -1,5 +1,5 @@
 {
-  "name": "ts-rundeck",
+  "name": "@rundeck/client",
   "version": "0.2.0",
   "description": "Rundeck TypeScript SDK",
   "main": "dist/index.js",

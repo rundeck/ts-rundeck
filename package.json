@@ -21,7 +21,7 @@
   "dependencies": {
     "@azure/ms-rest-js": "2.0.7",
     "@types/promise-queue": "^2.2.0",
-    "axios": "^0.21.3",
+    "axios": "^1.6.8",
     "promise-queue": "^2.2.5"
   },
   "devDependencies": {

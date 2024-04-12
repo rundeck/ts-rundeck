@@ -1,6 +1,6 @@
 {
   "name": "@rundeck/client",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Rundeck TypeScript SDK",
   "main": "dist/index.js",
   "browser": {

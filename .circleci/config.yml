@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  snyk: snyk/snyk@2.2 # https://circleci.com/developer/orbs/orb/snyk/snyk
+
 jobs:
   build:
     docker:
@@ -14,7 +17,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - git/rebase_on_main
       - snyk/install
       - run: snyk config set org='rundeck-core-mtgfa3XPaKGbFtHj9aRXhg' # this will need to be updated if the project changes owners
       - run: snyk test --severity-threshold=low --all-projects --detection-depth=10 # will fail step if any results are found

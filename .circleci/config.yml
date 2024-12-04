@@ -8,3 +8,21 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
+  snyk_test:
+    docker:
+      - image: cimg/node:10.15 # this should match what's used in the rest of the project
+    steps:
+      - checkout
+      - setup_remote_docker
+      - git/rebase_on_main
+      - snyk/install
+      - run: snyk config set org='rundeck-core-mtgfa3XPaKGbFtHj9aRXhg' # this will need to be updated if the project changes owners
+      - run: snyk test --severity-threshold=low --all-projects --detection-depth=10 # will fail step if any results are found
+
+workflows:
+  test_and_build:
+    jobs:
+      - snyk_test:
+          context:
+            - Snyk
+      - build

@@ -1,3 +1,15 @@
+# **⚠️ DEPRECATION NOTICE**
+> 
+> This repository is deprecated and is no longer actively maintained. We recommend migrating to the official Rundeck API client or using the Rundeck REST API directly.
+> 
+> - **No new features** will be added
+> - **No bug fixes** will be provided
+> - **No security updates** will be released
+> 
+> Please consider alternative solutions for your Rundeck integration needs.
+
+---
+
 Rundeck TypeScript(Javascript) SDK
 ==================================
 TypeScript SDK generated from an OpenApi 2.0 spec via Autorest.

@@ -19,7 +19,7 @@
     "url": "https://github.com/rundeck/ts-rundeck"
   },
   "dependencies": {
-    "@azure/ms-rest-js": "2.0.7",
+    "@azure/ms-rest-js": "2.7.0",
     "@types/promise-queue": "^2.2.0",
     "axios": "^0.30.0",
     "promise-queue": "^2.2.5"

@@ -19,9 +19,9 @@
     "url": "https://github.com/rundeck/ts-rundeck"
   },
   "dependencies": {
-    "@azure/ms-rest-js": "2.0.7",
+    "@azure/ms-rest-js": "2.7.0",
     "@types/promise-queue": "^2.2.0",
-    "axios": "^0.21.3",
+    "axios": "^0.30.0",
     "promise-queue": "^2.2.5"
   },
   "devDependencies": {
@@ -29,7 +29,7 @@
     "autorest": "2.0.4283",
     "fetch-mock": "^9.10.1",
     "ts-node": "^6.0.3",
-    "typescript": "3.8.3"
+    "typescript": "^4.5.0"
   },
   "files": [
     "dist/**/*",

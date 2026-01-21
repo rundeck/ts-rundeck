@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  snyk: pagerduty/snyk@2  # https://circleci.com/developer/orbs/orb/pagerduty/snyk
+
 jobs:
   build:
     docker:
@@ -8,3 +11,13 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
+
+workflows:
+  build-and-test:
+    jobs:
+      - snyk/snyk_test_full_scan:
+          organization: rundeck-core-mtgfa3XPaKGbFtHj9aRXhg
+          context:
+            - PagerDuty
+            - Snyk
+      - build
